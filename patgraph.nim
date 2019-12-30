@@ -35,9 +35,9 @@ proc `[]`*[N, E](self: var Graph[N, E], a: Natural): var N =
    ## Access the weight for node `a`, mutably.
    self.nodes[a].weight
 
-proc `[]=`*[N, E](self: var Graph[N, E], a: Natural): var N =
+proc `[]=`*[N, E](self: var Graph[N, E], a: Natural, v: N) =
    ## Set the weight for node `a`.
-   self.nodes[a].weight
+   self.nodes[a].weight = v
 
 proc addEdge*[N, E](self: var Graph[N, E], a, b: Natural, weight: E) =
    ## Add an edge from `a` to `b` to the graph, with its associated
@@ -141,7 +141,7 @@ iterator neighbors*[N, E](self: Graph[N, E], a: Natural): int =
    ## Neighbors are listed in reverse order of their
    ## addition to the graph, so the most recently added edge's neighbor is
    ## listed first.
-   assert(a < self.nodes.len, "node indices out of bounds")
+   assert(a < self.nodes.len, "node index out of bounds")
    var edix = self.nodes[a].next[0]
    while edix < self.edges.len:
       let edge = self.edges[int(edix)]
@@ -155,7 +155,7 @@ iterator edges*[N, E](self: Graph[N, E], a: Natural): (int, E) =
    ## Neighbors are listed in reverse order of their
    ## addition to the graph, so the most recently added edge's neighbor is
    ## listed first.
-   assert(a < self.nodes.len, "node indices out of bounds")
+   assert(a < self.nodes.len, "node index out of bounds")
    var edix = self.nodes[a].next[0]
    while edix < self.edges.len:
       let edge = self.edges[int(edix)]
@@ -184,15 +184,15 @@ when isMainModule:
    let nodeH = graph.addNode("h")
 
    graph.extendWithEdges([
-      (nodeA, nodeB, 1.0),
-      (nodeA, nodeC, 1.0),
-      (nodeB, nodeD, 1.0),
-      (nodeB, nodeE, 1.0),
+      (nodeA, nodeB, 0.0),
+      (nodeA, nodeC, 0.25),
+      (nodeB, nodeD, 0.5),
+      (nodeB, nodeE, 0.75),
       (nodeC, nodeF, 1.0),
-      (nodeC, nodeG, 1.0),
+      (nodeC, nodeG, 1.25),
       (nodeE, nodeF, 1.5),
-      (nodeE, nodeH, 2.0),
-      (nodeF, nodeG, 1.0)])
+      (nodeE, nodeH, 1.75),
+      (nodeF, nodeG, 2.0)])
 
    block: #a
       var nodes: seq[int]
@@ -213,8 +213,9 @@ when isMainModule:
       var edges: seq[(int, float)]
       for edge in edges(graph, nodeE):
          edges.add edge
-      assert edges == @[(nodeH, 2.0), (nodeF, 1.5)]
-   echo graph
+      assert edges == @[(nodeH, 1.75), (nodeF, 1.5)]
+
+#    echo graph
 
 #    const graph2 = graphFromEdges[string, float]({
 #       0: 1, 0: 2, 1: 3, 1: 4,
