@@ -139,7 +139,7 @@ proc graphFromEdges*[N, E](iterable: openArray[(int, int)]): Graph[N, E] =
 
 iterator neighbors*[N, E](self: Graph[N, E], a: Natural, dir = Outgoing): int =
    ## Return all neighbors that have an edge between them and
-   ## `a`, all edges from `a`.
+   ## `a`, in the specified direction.
    ##
    ## Neighbors are listed in reverse order of their
    ## addition to the graph, so the most recently added edge's neighbor is
@@ -153,7 +153,7 @@ iterator neighbors*[N, E](self: Graph[N, E], a: Natural, dir = Outgoing): int =
 
 iterator edges*[N, E](self: Graph[N, E], a: Natural, dir = Outgoing): (int, E) =
    ## Return all neighbors that have an edge between them and
-   ## `a`, all edges from `a`.
+   ## `a`, in the specified direction.
    ##
    ## Neighbors are listed in reverse order of their
    ## addition to the graph, so the most recently added edge's neighbor is

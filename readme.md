@@ -4,6 +4,8 @@
 ## About
 This nimble package contains a ``Graph[N, E]`` graph datastructure using an adjacency list representation.
 
+[Documentation](https://b3liever.github.io/patgraph/)
+
 ### Example
 
 ```nim
@@ -21,15 +23,15 @@ let nodeG = graph.addNode("g")
 let nodeH = graph.addNode("h")
 
 graph.extendWithEdges([
-   (nodeA, nodeB, 1.0),
-   (nodeA, nodeC, 1.0),
-   (nodeB, nodeD, 1.0),
-   (nodeB, nodeE, 1.0),
+   (nodeA, nodeB, 0.0),
+   (nodeA, nodeC, 0.25),
+   (nodeB, nodeD, 0.5),
+   (nodeB, nodeE, 0.75),
    (nodeC, nodeF, 1.0),
-   (nodeC, nodeG, 1.0),
+   (nodeC, nodeG, 1.25),
    (nodeE, nodeF, 1.5),
-   (nodeE, nodeH, 2.0),
-   (nodeF, nodeG, 1.0)])
+   (nodeE, nodeH, 1.75),
+   (nodeF, nodeG, 2.0)])
 
 echo graph
 # a -> [c: 0.25, b: 0.0]
@@ -40,6 +42,11 @@ echo graph
 # f -> [g: 2.0]
 # g -> []
 # h -> []
+
+for n in graph.neighbors(nodeC):
+   echo graph[n]
+# g
+# f
 ```
 
 ### License
