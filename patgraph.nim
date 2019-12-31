@@ -1,4 +1,7 @@
 type
+   Direction* = enum
+      Outgoing, Incoming
+
    Node[N] = object         ## The graph's node type.
       weight: N             ## Associated node data.
       next: array[2, int32] ## Next edge in outgoing and incoming edge lists.
@@ -50,7 +53,7 @@ proc addEdge*[N, E](self: var Graph[N, E], a, b: Natural, weight: E) =
       next: [invalid, invalid])
    template an: Node[N] = self.nodes[a]
    template bn: Node[N] = self.nodes[b]
-   if a == b:
+   if a == b: # disallow self-loops?
       edge.next = an.next
       an.next[0] = result.int32
       an.next[1] = result.int32
@@ -134,7 +137,7 @@ proc graphFromEdges*[N, E](iterable: openArray[(int, int, E)]): Graph[N, E] =
 proc graphFromEdges*[N, E](iterable: openArray[(int, int)]): Graph[N, E] =
    result.extendWithEdges(iterable)
 
-iterator neighbors*[N, E](self: Graph[N, E], a: Natural): int =
+iterator neighbors*[N, E](self: Graph[N, E], a: Natural, dir = Outgoing): int =
    ## Return all neighbors that have an edge between them and
    ## `a`, all edges from `a`.
    ##
@@ -142,13 +145,13 @@ iterator neighbors*[N, E](self: Graph[N, E], a: Natural): int =
    ## addition to the graph, so the most recently added edge's neighbor is
    ## listed first.
    assert(a < self.nodes.len, "node index out of bounds")
-   var edix = self.nodes[a].next[0]
+   var edix = self.nodes[a].next[dir.ord]
    while edix < self.edges.len:
       let edge = self.edges[int(edix)]
-      yield edge.node[1].int
-      edix = edge.next[0]
+      yield edge.node[1 - dir.ord].int
+      edix = edge.next[dir.ord]
 
-iterator edges*[N, E](self: Graph[N, E], a: Natural): (int, E) =
+iterator edges*[N, E](self: Graph[N, E], a: Natural, dir = Outgoing): (int, E) =
    ## Return all neighbors that have an edge between them and
    ## `a`, all edges from `a`.
    ##
@@ -156,20 +159,20 @@ iterator edges*[N, E](self: Graph[N, E], a: Natural): (int, E) =
    ## addition to the graph, so the most recently added edge's neighbor is
    ## listed first.
    assert(a < self.nodes.len, "node index out of bounds")
-   var edix = self.nodes[a].next[0]
+   var edix = self.nodes[a].next[dir.ord]
    while edix < self.edges.len:
       let edge = self.edges[int(edix)]
-      yield (edge.node[1].int, edge.weight)
-      edix = edge.next[0]
+      yield (edge.node[1 - dir.ord].int, edge.weight)
+      edix = edge.next[dir.ord]
 
 proc `$`[N, E](self: Graph[N, E]): string =
-   for p in 0 ..< len(self):
+   for i in 0 ..< len(self):
       if result.len > 0: result.add("\n")
       var row = ""
-      for (nix, w) in edges(self, p):
+      for (j, w) in edges(self, i):
          if row.len > 0: row.add(", ")
-         row.add($self[nix] & ": " & $w)
-      result.add($self[p] & " -> [" & row & "]")
+         row.add($self[j] & ": " & $w)
+      result.add($self[i] & " -> [" & row & "]")
 
 when isMainModule:
    var graph: Graph[string, float]
@@ -214,6 +217,11 @@ when isMainModule:
       for edge in edges(graph, nodeE):
          edges.add edge
       assert edges == @[(nodeH, 1.75), (nodeF, 1.5)]
+   block: #f
+      var edges: seq[(int, float)]
+      for edge in edges(graph, nodeF, Incoming):
+         edges.add edge
+      assert edges == @[(nodeE, 1.5), (nodeC, 1.0)]
 
 #    echo graph
 
