@@ -8,3 +8,7 @@ license       = "MIT"
 # Dependencies
 
 requires "nim >= 1.0.9"
+#requires "nake"
+
+#task test, "run tests":
+  #exec "nake test"

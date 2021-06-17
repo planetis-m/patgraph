@@ -5,7 +5,7 @@
 This nimble package contains a ``Graph[N, E]`` graph datastructure using an adjacency list representation.
 It is based on [petgraph's](https://github.com/petgraph/petgraph/blob/master/src/graph_impl/mod.rs) library.
 
-[Documentation](https://b3liever.github.io/patgraph/)
+[Documentation](https://b3liever.github.io/patgraph/patgraph.html)
 
 ### Example
 
@@ -52,4 +52,4 @@ for n in graph.neighbors(nodeC):
 
 ### License
 
-This library is distributed under the MIT license. For more information see `copying.txt`.
+This library is distributed under the MIT license. For more information see `LICENSE`.
