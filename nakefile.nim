@@ -10,7 +10,7 @@ task "docs", "Generate documentation":
   if doc.needsRefresh(src):
     echo "Generating the docs..."
     direShell(nimExe,
-        &"doc --verbosity:0 --git.url:{url} --git.devel:master --git.commit:master --out:{dir} {src}")
+        &"doc --project --verbosity:0 --git.url:{url} --git.devel:master --git.commit:master --out:{dir} {src}")
   else:
     echo "Skipped generating the docs."
 

@@ -133,9 +133,11 @@ proc graphFromEdges*[N, E](iterable: openArray[(int, int, E)]): Graph[N, E] =
   ##     (1, 2), (1, 3),
   ##     (2, 3)])
   ##
+  result = Graph[N, E](nodes: @[], edges: @[])
   result.extendWithEdges(iterable)
 
 proc graphFromEdges*[N, E](iterable: openArray[(int, int)]): Graph[N, E] =
+  result = Graph[N, E](nodes: @[], edges: @[])
   result.extendWithEdges(iterable)
 
 iterator neighbors*[N, E](self: Graph[N, E], a: Natural, dir = Outgoing): int =
