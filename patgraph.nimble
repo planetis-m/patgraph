@@ -8,7 +8,20 @@ license       = "MIT"
 # Dependencies
 
 requires "nim >= 1.0.9"
-#requires "nake"
 
-#task test, "run tests":
-  #exec "nake test"
+import os
+
+const
+  ProjectUrl = "https://github.com/planetis-m/patgraph"
+  PkgDir = thisDir().quoteShell
+  DocsDir = PkgDir / "docs"
+
+task docs, "Generate documentation":
+  # https://nim-lang.github.io/Nim/docgen.html
+  withDir(PkgDir):
+    let tmp = "patgraph"
+    let doc = DocsDir / (tmp & ".html")
+    let src = tmp & ".nim"
+    # Generate the docs for {src}
+    exec("nim doc --verbosity:0 --git.url:" & ProjectUrl &
+        " --git.devel:main --git.commit:main --out:" & doc & " " & src)
