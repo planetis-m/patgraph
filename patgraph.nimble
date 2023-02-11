@@ -24,4 +24,4 @@ task docs, "Generate documentation":
     let src = tmp & ".nim"
     # Generate the docs for {src}
     exec("nim doc --verbosity:0 --git.url:" & ProjectUrl &
-        " --git.devel:main --git.commit:main --out:" & doc & " " & src)
+        " --git.devel:master --git.commit:master --out:" & doc & " " & src)
